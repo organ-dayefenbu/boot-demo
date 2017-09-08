@@ -14,6 +14,9 @@ public class TestController extends BaseController{
 	public void test(TestVo vo){
 		System.out.println("AAAAAAAAAAAAA");
 //		return result;
+		
+		
+		
 	}
 	
 	
