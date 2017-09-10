@@ -1,4 +1,4 @@
-package com.demo.boot.conf.db;
+package com.demo.boot.conf;
 
 import javax.sql.DataSource;
 
@@ -16,7 +16,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 
 @Configuration
 @MapperScan("com.demo.boot.dao")
-public class MyBatisConfiguration {
+public class MyBatisConfig {
 
 	@Value("${jdbc.driver}")
     private String driver;
