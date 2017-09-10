@@ -38,6 +38,9 @@ public class ErrorMessageCache {
 						String key = (String)entry.getKey();
 						String value = new String(
 								String.valueOf(entry.getValue()).getBytes("ISO-8859-1"),"utf-8");
+						if(!Pattern.matches(regex, key)){
+							continue;
+						}
 						if(key.endsWith("CODE")){
 							errorCodeCache.put(key.toUpperCase(), value);
 						}
@@ -54,7 +57,7 @@ public class ErrorMessageCache {
 	}
 	/**
 	 * 获取缓存的错误信息
-	 * @param key
+	 * @param codeKey
 	 * @return
 	 */
 	public static String getMsgCache(String codeKey){
@@ -66,6 +69,11 @@ public class ErrorMessageCache {
 		}
 		return value;
 	}
+	/**
+	 * 获取缓存错误码
+	 * @param codeKey
+	 * @return
+	 */
 	public static Long getCodeCashe(String codeKey){
 		Long code = null;
 		if(errorCodeCache.containsKey(codeKey)){
