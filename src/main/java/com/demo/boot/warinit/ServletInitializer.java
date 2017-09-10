@@ -1,7 +1,7 @@
 package com.demo.boot.warinit;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 import com.demo.boot.main.Application;
 
