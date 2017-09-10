@@ -1,6 +1,6 @@
 package com.demo.boot.exception;
 
-public class ValidateException extends CunstomException{
+public class ValidateException extends CustomException{
 	private static final long validateCode = 50000L;
 	/**
 	 * 

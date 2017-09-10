@@ -4,7 +4,7 @@ package com.demo.boot.exception;
  * @author lism
  *
  */
-public class CunstomException extends RuntimeException{
+public class CustomException extends RuntimeException{
 	private static final long defaultCode = 10000L;
 	private static final String defaultMsg = "未知异常";
 
@@ -17,11 +17,11 @@ public class CunstomException extends RuntimeException{
 	
 	private String msg;
 	
-	protected CunstomException(){
+	protected CustomException(){
 		super();
 	}
 	
-	protected CunstomException(Long code,String msg){
+	protected CustomException(Long code,String msg){
 		this.code = code;
 		this.msg = msg;
 	}
@@ -30,7 +30,7 @@ public class CunstomException extends RuntimeException{
 	 * @param msg 错误信息
 	 * @param e
 	 */
-	public CunstomException(String msg,Throwable e){
+	public CustomException(String msg,Throwable e){
 		this.code = defaultCode;
 		this.msg = msg;
 		super.initCause(e);
@@ -39,7 +39,7 @@ public class CunstomException extends RuntimeException{
 	 * 错误codeKey
 	 * @param codeKey
 	 */
-	public CunstomException(String codeKey){
+	public CustomException(String codeKey){
 		
 		Long code = ErrorMessageCache.getCodeCashe(codeKey);
 		String msg = ErrorMessageCache.getMsgCache(codeKey);

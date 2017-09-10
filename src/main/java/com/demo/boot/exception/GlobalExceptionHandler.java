@@ -1,18 +1,14 @@
 package com.demo.boot.exception;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.ConversionNotSupportedException;
-import org.springframework.beans.TypeMismatchException;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.http.converter.HttpMessageNotWritableException;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,100 +18,49 @@ public class GlobalExceptionHandler{
 
 	@ExceptionHandler(value = Exception.class)
     @ResponseBody
-    public String jsonErrorHandler(HttpServletRequest req, Exception e){
-        logger.error(e.toString(),e);
-        return "错误";
+    public Object jsonErrorHandler(HttpServletRequest req, Exception ex){
+        logger.error(ex.toString(),ex);
+        
+        long code = 10000;
+		String errMessage = "系统繁忙,请稍后再试！";
+		if(ex.getClass().equals(CustomException.class)){
+			code = ((CustomException) ex).getCode();
+			errMessage = ex.getMessage();
+		} else if(ex.getClass().equals(ValidateException.class)){
+			code = ((ValidateException) ex).getCode();
+			errMessage = ex.getMessage();
+		}else if (ex.getClass().equals(NullPointerException.class)) {
+			errMessage = "调用了未经初始化的对象或者是不存在的对象！";
+		} else if (ex.getClass().equals(IOException.class)) {
+			errMessage = "IO异常！";
+		} else if (ex.getClass().equals(ClassNotFoundException.class)) {
+			errMessage = "指定的类不存在！";
+		} else if (ex.getClass().equals(ArithmeticException.class)) {
+			errMessage = "数学运算异常！";
+		} else if (ex.getClass().equals(ArrayIndexOutOfBoundsException.class)) {
+			errMessage = "数组下标越界!";
+		} else if (ex.getClass().equals(IllegalArgumentException.class)) {
+			errMessage = "方法的参数错误！";
+		} else if (ex.getClass().equals(ClassCastException.class)) {
+			errMessage = "类型强制转换错误！";
+		} else if (ex.getClass().equals(SecurityException.class)) {
+			errMessage = "违背安全原则异常！";
+		} else if (ex.getClass().equals(SQLException.class)) {
+			errMessage = "操作数据库异常！";
+		} else if (ex.getClass().equals(NoSuchMethodError.class)) {
+			errMessage = "方法末找到异常！";
+		} else if (ex.getClass().equals(InternalError.class)) {
+			errMessage = "Java虚拟机发生了内部错误";
+		}else {
+			errMessage = "程序内部错误，操作失败！";
+		}
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("msg", errMessage);
+		map.put("status", code);
+        
+        return map;
     }
 	
-	//运行时异常
-    @ExceptionHandler(RuntimeException.class)  
-    @ResponseBody  
-    public String runtimeExceptionHandler(RuntimeException runtimeException) {  
-
-        return "";
-    }  
-
-    //空指针异常
-    @ExceptionHandler(NullPointerException.class)  
-    @ResponseBody  
-    public String nullPointerExceptionHandler(NullPointerException ex) {  
-        ex.printStackTrace();
-        return "";
-    }   
-    //类型转换异常
-    @ExceptionHandler(ClassCastException.class)  
-    @ResponseBody  
-    public String classCastExceptionHandler(ClassCastException ex) {  
-        ex.printStackTrace();
-        return "";  
-    }  
-
-    //IO异常
-    @ExceptionHandler(IOException.class)  
-    @ResponseBody  
-    public String iOExceptionHandler(IOException ex) {  
-        ex.printStackTrace();
-        return ""; 
-    }  
-    //未知方法异常
-    @ExceptionHandler(NoSuchMethodException.class)  
-    @ResponseBody  
-    public String noSuchMethodExceptionHandler(NoSuchMethodException ex) {  
-        ex.printStackTrace();
-        return "";
-    }  
-
-    //数组越界异常
-    @ExceptionHandler(IndexOutOfBoundsException.class)  
-    @ResponseBody  
-    public String indexOutOfBoundsExceptionHandler(IndexOutOfBoundsException ex) {  
-        ex.printStackTrace();
-        return "";
-    }
-    //400错误
-    @ExceptionHandler({HttpMessageNotReadableException.class})
-    @ResponseBody
-    public String requestNotReadable(HttpMessageNotReadableException ex){
-        System.out.println("400..requestNotReadable");
-        ex.printStackTrace();
-        return "";
-    }
-    //400错误
-    @ExceptionHandler({TypeMismatchException.class})
-    @ResponseBody
-    public String requestTypeMismatch(TypeMismatchException ex){
-        System.out.println("400..TypeMismatchException");
-        ex.printStackTrace();
-        return "";
-    }
-    //400错误
-    @ExceptionHandler({MissingServletRequestParameterException.class})
-    @ResponseBody
-    public String requestMissingServletRequest(MissingServletRequestParameterException ex){
-        System.out.println("400..MissingServletRequest");
-        ex.printStackTrace();
-        return "";
-    }
-    //405错误
-    @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
-    @ResponseBody
-    public String request405(){
-        System.out.println("405...");
-        return "";
-    }
-    //406错误
-    @ExceptionHandler({HttpMediaTypeNotAcceptableException.class})
-    @ResponseBody
-    public String request406(){
-        System.out.println("404...");
-        return "";
-    }
-    //500错误
-    @ExceptionHandler({ConversionNotSupportedException.class,HttpMessageNotWritableException.class})
-    @ResponseBody
-    public String server500(RuntimeException runtimeException){
-        System.out.println("500...");
-        return "";
-    }
+	
 
 }
